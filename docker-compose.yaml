@@ -1,24 +1,20 @@
 services:
-
   code-server:
     image: lscr.io/linuxserver/code-server:latest
-    container_name: code-server
+    container_name: docker-code
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/Madrid
-      - PASSWORD=p4ssw0rd  #optional
-      - HASHED_PASSWORD= #optional
-      - SUDO_PASSWORD=p4ssw0rd  #optional
-      - SUDO_PASSWORD_HASH= #optional
-      - PROXY_DOMAIN= <tudominio.com>  #optional
-      - DEFAULT_WORKSPACE=/config/workspace #optional
-      - DOCKER_MODS="linuxserver/mods:universal-docker"
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-Europe/Madrid}
+      - PASSWORD=${PASSWORD}
+      - HASHED_PASSWORD=${HASHED_PASSWORD:-}
+      - SUDO_PASSWORD=${SUDO_PASSWORD:-${PASSWORD}}
+      - SUDO_PASSWORD_HASH=${SUDO_PASSWORD_HASH:-}
+      - DEFAULT_WORKSPACE=${DEFAULT_WORKSPACE:-/config/workspace}
+      - DOCKER_MODS=${DOCKER_MODS:-"linuxserver/mods:universal-docker"}
     volumes:
       - ./config:/config
-      - /var/run/docker.sock:/var/run/docker.sock      
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${FOLDER}:/data
     ports:
-      - "8443:8443"
-    restart: unless-stopped
-
-
+      - "${PORT:-8443}:${PORT:-8443}"
